@@ -29,15 +29,15 @@ public class EmployeeDaoHibernateImpl implements EmployeeDAO {
     }
 
     @Override
-    public void saveEmployee(Employee employee) {
+    public void saveOrUpdate(Employee employee) {
         entityManager.unwrap(Session.class).saveOrUpdate(employee);
     }
 
     @Override
-    public void deleteEmployeeById(int id) {
-        entityManager.unwrap(Session.class).createQuery(
-        "delete from Employee where id = :id",
-            Employee.class
-        ).executeUpdate();
+    public void deleteById(int id) {
+        entityManager.unwrap(Session.class)
+            .createQuery("delete from Employee where id = :id")
+            .setParameter("id", id)
+            .executeUpdate();
     }
 }

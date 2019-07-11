@@ -1,22 +1,18 @@
 package com.luv2code.cruddemo.rest;
 
-import com.luv2code.cruddemo.dao.EmployeeDAO;
 import com.luv2code.cruddemo.entity.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.luv2code.cruddemo.service.EmployeeService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class EmployeeRestController {
-    private EmployeeDAO employeeDAO;
+    private EmployeeService employeeService;
 
-    @Autowired
-    public EmployeeRestController(EmployeeDAO employeeDAO) {
-        this.employeeDAO = employeeDAO;
+    public EmployeeRestController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/test")
@@ -24,9 +20,40 @@ public class EmployeeRestController {
         return "OK";
     }
 
-    @GetMapping("/employees")
+    @GetMapping("/employee")
     public List<Employee> employees() {
-        System.out.println("Hi!");
-        return employeeDAO.findAll();
+        return employeeService.findAll();
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public Employee getEmployeeById(@PathVariable int employeeId) {
+        Employee employee = employeeService.findById(employeeId);
+        if (employee == null) {
+            throw new RuntimeException("Employee with id " + employeeId + " not found");
+        }
+        return employee;
+    }
+
+    @PostMapping("/employee")
+    public Employee createEmployee(@RequestBody Employee employee) {
+        employee.setId(0);
+        employeeService.save(employee);
+        return employee;
+    }
+
+    @DeleteMapping("/employee/{employeeId}")
+    public Employee deleteEmployee(@PathVariable int employeeId) {
+        Employee employee = employeeService.findById(employeeId);
+        if (employee == null) {
+            throw new RuntimeException("Employee with id " + employeeId + "not found");
+        }
+        employeeService.deleteById(employeeId);
+        return  employee;
+    }
+
+    @PutMapping("/employee")
+    public Employee updateEmployee(@RequestBody Employee employee) {
+        employeeService.save(employee);
+        return employee;
     }
 }
