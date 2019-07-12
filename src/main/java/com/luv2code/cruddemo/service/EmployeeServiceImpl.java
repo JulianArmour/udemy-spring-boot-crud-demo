@@ -2,6 +2,7 @@ package com.luv2code.cruddemo.service;
 
 import com.luv2code.cruddemo.dao.EmployeeDAO;
 import com.luv2code.cruddemo.entity.Employee;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDAO employeeDAO;
 
-    public EmployeeServiceImpl(EmployeeDAO employeeDAO) {
+    public EmployeeServiceImpl(@Qualifier("employeeDaoJpaImpl") EmployeeDAO employeeDAO) {
         this.employeeDAO = employeeDAO;
     }
 
