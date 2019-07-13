@@ -15,11 +15,6 @@ public class EmployeeRestController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "OK";
-    }
-
     @GetMapping("/employee")
     public List<Employee> employees() {
         return employeeService.findAll();
